@@ -20,14 +20,19 @@ Custom integration cho Home Assistant, đọc **sự kiện nhận diện khuôn
   - **cài đặt** – polling, dedup, giới hạn lưu trữ, bật/tắt và đổi tên sidebar.
 - Đổi tên một người áp dụng cho **toàn bộ record cũ** (lịch sử lưu theo Face ID, tên được tra lúc hiển thị).
 - Giới hạn lưu trữ: giữ thống kê/người lạ tối đa N ngày và tối đa M người lạ.
-- Chạy **song song với Tapo-Control** bằng cách dùng lại controller của nó cho cùng camera, để hai integration không tranh session với camera.
+- Chạy **song song với Tapo-Control** bằng cách dùng lại controller của nó cho cùng camera, để hai integration không tranh session với camera (xem [Chế độ hoạt động](#chế-độ-hoạt-động)).
 - Có luồng đăng nhập lại khi camera từ chối đăng nhập.
 
 ## Yêu cầu
 
-- Home Assistant **2026.10** trở lên (phiên bản đã test).
+- Home Assistant **2026.9.4** trở lên (phiên bản tối thiểu được khai báo).
 - Camera Tapo **C260** đã bật nhận diện khuôn mặt trong app Tapo, và tài khoản camera (username + Cloud Password).
 - Tuỳ chọn: integration [Tapo-Control](https://github.com/JurajNyiri/HomeAssistant-Tapo-Control) cho cùng camera.
+
+## Môi trường đã thử nghiệm
+
+- Camera: Tapo C260 với firmware `1.2.3 Build 260805 Rel.20715n` và `1.3.2 Build 260902 Rel.25093n`.
+- Tapo-Control (Tapo: Cameras Control): phiên bản mới nhất tại thời điểm kiểm thử.
 
 ## Cài đặt
 
@@ -43,7 +48,43 @@ Chép thư mục `custom_components/tapo_c260_face` vào `config/custom_componen
 
 ## Thiết lập
 
-Nhập IP camera, username tài khoản camera và Cloud Password. Sau đó mở **Face Manager** (sidebar hoặc `/tapo_c260_face`), xem tab *Unknown* sau khi camera thấy ai đó, bấm **Thêm người** để đặt tên cho Face ID đó.
+1. Settings → Devices & services → **Add integration** → *Tapo C260 Face Recognition*.
+2. Điền form cấu hình (form giống nhau ở cả hai chế độ hoạt động — xem [Chế độ hoạt động](#chế-độ-hoạt-động)):
+
+   | Trường | Nhập gì |
+   |---|---|
+   | **Host** | Địa chỉ IP nội bộ của Tapo C260, ví dụ `192.168.1.188`. |
+   | **Username** | Tên tài khoản camera đã cấu hình trên camera để kết nối cục bộ / bên thứ ba. Đây không phải email tài khoản Tapo Cloud của bạn. |
+   | **Cloud Password** | Cloud Password của camera cho tài khoản đó. Integration chỉ dùng nó trong luồng đăng nhập challenge/response nội bộ của camera (`cnonce`/`nonce`, `digest_passwd`; mật khẩu được băm thành digest, không bao giờ gửi dạng plain text). Nó được lưu trong config entry của Home Assistant như thông tin đăng nhập của mọi integration khác. |
+
+3. Đăng nhập được kiểm tra với camera ngay khi thêm. Nếu sau này camera từ chối, luồng đăng nhập lại sẽ hỏi lại username và Cloud Password.
+4. Code của integration không yêu cầu bước chuẩn bị nào khác (không có nút bật tương thích nào bên trong integration này): nó kết nối thẳng tới API nội bộ của camera tại IP đã nhập, dùng thông tin tài khoản camera ở trên.
+5. Không nhập thông tin đăng nhập vào file README, GitHub issue, URL, log hay ảnh chụp công khai.
+
+Sau đó mở **Face Manager** (sidebar hoặc `/tapo_c260_face`), xem tab *Unknown* sau khi camera thấy ai đó, bấm **Thêm người** để đặt tên cho Face ID đó.
+
+## Ảnh minh họa
+
+![Sensors](docs/images/sensors.jpg)
+*Các sensor của thiết bị: khuôn mặt gần nhất, số người quen/người lạ, trạng thái phát hiện người lạ và bộ đếm sức khỏe.*
+
+![Event và chẩn đoán](docs/images/event-diagnostic.jpg)
+*Trang thiết bị: một event `face_unknown` cùng các sensor chẩn đoán. Ở đây Connection Mode là `shared`, tức chế độ dùng chung controller (xem bên dưới).*
+
+![Face Manager – người quen](docs/images/face-manager-known.jpg)
+*Face Manager, tab Known: ánh xạ Face ID → tên, banner sức khỏe và chế độ kết nối.*
+
+![Face Manager – người lạ](docs/images/face-manager-unknown.jpg)
+*Face Manager, tab Unknown: các Face ID lạ kèm lần thấy đầu/cuối và số lần; bấm Add person để đặt tên.*
+
+![Face Manager – thống kê](docs/images/face-manager-statistics.jpg)
+*Face Manager, tab Statistics: số người lạ, biểu đồ xuất hiện theo ngày và người lạ hay gặp nhất.*
+
+![Face Manager – cài đặt](docs/images/face-manager-settings.jpg)
+*Face Manager, tab Settings: polling/dedup, giới hạn lưu trữ và tùy chọn hiển thị sidebar.*
+
+![Menu tùy chọn](docs/images/options-menu.jpg)
+*Menu tùy chọn của integration (Configure → Management): quản lý Face ID, polling, lưu trữ và sidebar.*
 
 ## Entity (mỗi camera)
 
@@ -89,9 +130,27 @@ automation:
           message: "{{ trigger.event.data.name }} vừa xuất hiện"
 ```
 
-## Dùng cùng Tapo-Control
+## Chế độ hoạt động
 
-Nếu có entry Tapo-Control cho cùng IP camera và controller của nó đã sẵn sàng, integration này truy vấn `searchDetectionList` **qua controller đó** và không tự đăng nhập. Khi Tapo-Control còn đang khởi động thì chờ; nếu Tapo-Control bị tắt hoặc lỗi thì dùng session riêng. Cách này dựa vào cấu trúc dữ liệu nội bộ của Tapo-Control nên có thể hỏng khi họ thay đổi (đã test với Tapo-Control 7.2.7).
+Form cấu hình giống nhau ở cả hai chế độ: đăng nhập luôn được kiểm tra với camera khi tạo entry. Khác nhau ở cách mỗi lần poll truy vấn camera sau đó.
+
+|  | Chế độ độc lập | Chế độ dùng chung controller |
+|---|---|---|
+| Cần cài Tapo-Control | Không | Có, với một entry cho cùng IP camera |
+| Truy vấn camera qua | Session riêng của integration | Controller sẵn có của Tapo-Control (`searchDetectionList`) |
+| Phiên đăng nhập riêng tới camera | Có | Không — dùng lại controller đã xác thực của Tapo-Control và không tự đăng nhập khi ở chế độ này |
+| Vẫn cần nhập thông tin đăng nhập khi cài | Có | Có (kiểm tra một lần lúc cài) |
+| Entry Tapo-Control tồn tại nhưng đang khởi động | n/a | Chờ mà không tự đăng nhập; sức khỏe báo `waiting` cho tới khi controller sẵn sàng |
+| Entry Tapo-Control bị tắt / lỗi / không có controller dùng được | n/a | Rơi về session riêng |
+| Chỉnh sửa cấu hình Tapo-Control của bạn | Không | Không |
+
+### Chế độ độc lập (Standalone)
+
+Không cần Tapo-Control. Integration tự thực hiện đăng nhập bảo mật nội bộ của camera (challenge/response với `cnonce`/`nonce`, `digest_passwd`, khóa phiên `lsk`/`ivb`, bằng bản triển khai asyncio riêng) và poll `searchDetectionList` qua session mã hóa riêng. Ở chế độ này nó không dùng chung phiên đăng nhập hay controller nào của Tapo-Control, vì không có gì để dùng chung.
+
+### Chế độ dùng cùng Tapo-Control (Shared-controller)
+
+Khi tồn tại entry Tapo-Control cho cùng IP camera và controller của nó đã sẵn sàng, integration gọi `searchDetectionList` **qua controller đó** thay vì tự đăng nhập, để hai integration không tranh session với camera. Khi entry Tapo-Control còn đang khởi động, integration chờ (trả về trạng thái rỗng vô hại để setup hoàn tất rồi thử lại ở lần poll sau) thay vì mở session thứ hai. Nếu entry Tapo-Control bị tắt, lỗi, hoặc đã load nhưng không có controller dùng được, integration ghi warning và dùng session riêng. Chế độ này chỉ *đọc* đối tượng controller lúc chạy; không thay thế, cấu hình lại hay sửa đổi gì trong setup Tapo-Control của bạn. Cách này dựa vào cấu trúc dữ liệu nội bộ của Tapo-Control nên có thể hỏng khi họ thay đổi (đã thử nghiệm với phiên bản Tapo-Control mới nhất tại thời điểm kiểm thử).
 
 ## Dữ liệu và quyền riêng tư
 
@@ -99,7 +158,7 @@ Mọi thứ nằm cục bộ. Thông tin đăng nhập camera lưu trong config 
 
 ## Giới hạn đã biết
 
-- Mới test trên một model (C260) và một firmware.
+- Mới thử nghiệm trên một model (C260) với firmware `1.2.3 Build 260805 Rel.20715n` và `1.3.2 Build 260902 Rel.25093n`.
 - Thống kê và lịch sử theo giờ chỉ có từ phiên bản bổ sung chúng.
 - Tên entity là tiếng Anh; trang Face Manager và config flow có tiếng Anh và tiếng Việt.
 
