@@ -1,0 +1,22 @@
+{
+  "domain": "tapo_c260_face",
+  "name": "Tapo C260 Face Recognition",
+  "after_dependencies": [
+    "tapo_control"
+  ],
+  "codeowners": [
+    "@quangtienhn"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http",
+    "frontend",
+    "panel_custom"
+  ],
+  "documentation": "https://github.com/quangtienhn/tapo-c260-face",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/quangtienhn/tapo-c260-face/issues",
+  "requirements": [],
+  "version": "0.1.7.1"
+}

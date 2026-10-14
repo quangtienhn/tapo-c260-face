@@ -1,0 +1,140 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tapo C260 Face Recognition",
+        "description": "Nhập IP camera, username và Cloud Password. Integration sẽ kiểm tra đăng nhập ngay khi thêm camera.",
+        "data": {
+          "host": "Địa chỉ IP camera",
+          "username": "Camera username",
+          "cloud_password": "Cloud Password"
+        },
+        "data_description": {
+          "host": "Ví dụ: 192.168.1.188",
+          "username": "Ví dụ: quangtien",
+          "cloud_password": "Cloud Password của camera"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Đăng nhập lại Tapo C260",
+        "description": "Camera {host} từ chối đăng nhập. Nhập lại username và Cloud Password.",
+        "data": {
+          "username": "Camera username",
+          "cloud_password": "Cloud Password"
+        }
+      }
+    },
+    "error": {
+      "authentication_failed": "Đăng nhập C260 thất bại. Kiểm tra username và Cloud Password.",
+      "cannot_connect": "Không thể kết nối tới Tapo C260."
+    },
+    "abort": {
+      "already_configured": "Camera này đã được cấu hình.",
+      "no_faces": "Chưa có Face ID nào được khai báo.",
+      "no_unknown_faces": "Chưa phát hiện Face ID lạ nào.",
+      "reauth_successful": "Đã cập nhật đăng nhập."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tapo C260 - Quản lý",
+        "menu_options": {
+          "faces": "Xem danh sách Face ID",
+          "add_face": "Thêm Face ID",
+          "edit_face": "Sửa Face ID / tên",
+          "delete_face": "Xóa Face ID",
+          "polling": "Polling / Dedup",
+          "unknown_faces": "Face ID lạ đã phát hiện",
+          "add_unknown": "Thêm người từ Face ID lạ",
+          "sidebar": "Hiển thị ở sidebar",
+          "retention": "Giới hạn lưu trữ (ngày / người lạ)"
+        }
+      },
+      "faces": {
+        "title": "Face ID đã khai báo",
+        "description": "{faces}"
+      },
+      "add_face": {
+        "title": "Thêm Face ID",
+        "description": "Nhập Face ID camera đã phát hiện và tên tương ứng.",
+        "data": {
+          "face_id": "Face ID",
+          "name": "Tên"
+        }
+      },
+      "edit_face": {
+        "title": "Sửa Face ID / tên",
+        "description": "Chọn mapping hiện tại rồi nhập Face ID và tên mới.",
+        "data": {
+          "old_face_id": "Face ID hiện tại",
+          "new_face_id": "Face ID mới",
+          "name": "Tên"
+        }
+      },
+      "delete_face": {
+        "title": "Xóa Face ID",
+        "description": "Chọn mapping muốn xóa.",
+        "data": {
+          "face_id": "Face ID"
+        }
+      },
+      "polling": {
+        "title": "Polling / Dedup",
+        "description": "Điều chỉnh tần suất đọc event và dedup.",
+        "data": {
+          "poll_interval": "Polling interval (giây)",
+          "history_seconds": "History window (giây)",
+          "dedup_seconds": "Dedup interval (giây)",
+          "stranger_clear_seconds": "Tự tắt \"Stranger Detected\" sau (giây)"
+        }
+      },
+      "unknown_faces": {
+        "title": "Face ID lạ đã phát hiện",
+        "description": "{unknown_faces}"
+      },
+      "add_unknown": {
+        "title": "Thêm người từ Face ID lạ",
+        "description": "Chọn một Face ID mà camera đã phát hiện, sau đó đặt tên.",
+        "data": {
+          "face_id": "Face ID",
+          "name": "Tên"
+        }
+      },
+      "sidebar": {
+        "title": "Hiển thị ở sidebar",
+        "description": "Bật hoặc tắt mục Tapo C260 Face Manager trong sidebar của Home Assistant. Khi đã ẩn, mở trang tại [/tapo_c260_face](/tapo_c260_face).",
+        "data": {
+          "show_sidebar": "Hiện ở sidebar",
+          "sidebar_title": "Tên ở sidebar"
+        },
+        "data_description": {
+          "show_sidebar": "Khi tắt, trang vẫn truy cập được qua /tapo_c260_face. Nếu có nhiều camera, sidebar hiện khi ít nhất một camera bật.",
+          "sidebar_title": "Để trống = \"Tapo C260 Face Manager\". Tối đa 40 ký tự. Nhiều camera: dùng tên của camera đầu tiên (theo tên) đang bật sidebar."
+        }
+      },
+      "retention": {
+        "title": "Giới hạn lưu trữ",
+        "description": "Thống kê và người lạ cũ hơn số ngày này sẽ bị xoá tự động; danh sách người lạ giữ tối đa số lượng bên dưới (bỏ người lâu không thấy nhất trước). Áp dụng ngay khi lưu.",
+        "data": {
+          "retention_days": "Số ngày lưu thống kê / người lạ",
+          "max_unknown_faces": "Số người lạ tối đa"
+        },
+        "data_description": {
+          "retention_days": "1–365 ngày",
+          "max_unknown_faces": "10–1000"
+        }
+      }
+    },
+    "error": {
+      "invalid_face_id": "Face ID phải là chuỗi số.",
+      "invalid_name": "Tên không được để trống.",
+      "face_id_exists": "Face ID này đã tồn tại."
+    }
+  },
+  "exceptions": {
+    "authentication_failed": {
+      "message": "Tapo C260 từ chối đăng nhập. Kiểm tra username và Cloud Password."
+    }
+  }
+}

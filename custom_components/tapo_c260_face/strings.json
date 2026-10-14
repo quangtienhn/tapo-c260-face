@@ -1,0 +1,140 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tapo C260 Face Recognition",
+        "description": "Enter the camera IP, username and Cloud Password. Login is tested when the camera is added.",
+        "data": {
+          "host": "Camera IP address",
+          "username": "Camera username",
+          "cloud_password": "Cloud Password"
+        },
+        "data_description": {
+          "host": "Example: 192.168.1.100",
+          "username": "Example: the camera account name",
+          "cloud_password": "The camera's Cloud Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Tapo C260",
+        "description": "Camera {host} rejected the login. Enter the username and Cloud Password again.",
+        "data": {
+          "username": "Camera username",
+          "cloud_password": "Cloud Password"
+        }
+      }
+    },
+    "error": {
+      "authentication_failed": "C260 authentication failed.",
+      "cannot_connect": "Unable to connect to the Tapo C260."
+    },
+    "abort": {
+      "already_configured": "This camera is already configured.",
+      "no_faces": "No Face IDs are configured.",
+      "no_unknown_faces": "No unknown Face IDs have been discovered.",
+      "reauth_successful": "Login updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tapo C260 - Management",
+        "menu_options": {
+          "faces": "View Face IDs",
+          "add_face": "Add Face ID",
+          "edit_face": "Edit Face ID / name",
+          "delete_face": "Delete Face ID",
+          "polling": "Polling / Dedup",
+          "unknown_faces": "View discovered unknown Face IDs",
+          "add_unknown": "Add person from unknown Face ID",
+          "sidebar": "Show in sidebar",
+          "retention": "Storage limits (days / strangers)"
+        }
+      },
+      "faces": {
+        "title": "Configured Face IDs",
+        "description": "{faces}"
+      },
+      "add_face": {
+        "title": "Add Face ID",
+        "data": {
+          "face_id": "Face ID",
+          "name": "Name"
+        },
+        "description": "Enter the Face ID the camera detected and the matching name."
+      },
+      "edit_face": {
+        "title": "Edit Face ID / name",
+        "data": {
+          "old_face_id": "Current Face ID",
+          "new_face_id": "New Face ID",
+          "name": "Name"
+        },
+        "description": "Choose the current mapping, then enter the new Face ID and name."
+      },
+      "delete_face": {
+        "title": "Delete Face ID",
+        "data": {
+          "face_id": "Face ID"
+        },
+        "description": "Choose the mapping to delete."
+      },
+      "polling": {
+        "title": "Polling / Dedup",
+        "data": {
+          "poll_interval": "Polling interval (seconds)",
+          "history_seconds": "History window (seconds)",
+          "dedup_seconds": "Dedup interval (seconds)",
+          "stranger_clear_seconds": "Auto-off \"Stranger Detected\" after (seconds)"
+        },
+        "description": "Adjust how often events are read, and dedup."
+      },
+      "unknown_faces": {
+        "title": "Discovered unknown Face IDs",
+        "description": "{unknown_faces}"
+      },
+      "add_unknown": {
+        "title": "Add person from unknown Face ID",
+        "data": {
+          "face_id": "Face ID",
+          "name": "Name"
+        },
+        "description": "Pick a Face ID the camera has detected, then give it a name."
+      },
+      "sidebar": {
+        "title": "Show in sidebar",
+        "description": "Show or hide the Tapo C260 Face Manager entry in the Home Assistant sidebar. When hidden, open the page at [/tapo_c260_face](/tapo_c260_face).",
+        "data": {
+          "show_sidebar": "Show in sidebar",
+          "sidebar_title": "Sidebar name"
+        },
+        "data_description": {
+          "show_sidebar": "When off, the page is still reachable at /tapo_c260_face. With several cameras, the sidebar entry is shown if at least one camera has it enabled.",
+          "sidebar_title": "Leave empty for \"Tapo C260 Face Manager\". Max 40 characters. With several cameras the first enabled camera (by name) that sets a name wins."
+        }
+      },
+      "retention": {
+        "title": "Storage limits",
+        "description": "Statistics and strangers older than this many days are removed automatically; the stranger list keeps at most the number below (least recently seen are dropped first). Applied immediately on save.",
+        "data": {
+          "retention_days": "Days to keep statistics / strangers",
+          "max_unknown_faces": "Maximum number of strangers"
+        },
+        "data_description": {
+          "retention_days": "1–365 days",
+          "max_unknown_faces": "10–1000"
+        }
+      }
+    },
+    "error": {
+      "invalid_face_id": "Face ID must contain digits only.",
+      "invalid_name": "Name cannot be empty.",
+      "face_id_exists": "This Face ID already exists."
+    }
+  },
+  "exceptions": {
+    "authentication_failed": {
+      "message": "The Tapo C260 rejected the login. Check the username and Cloud Password."
+    }
+  }
+}
