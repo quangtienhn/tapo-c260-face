@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!--
+    Tapo C260 Face Recognition – app icon (original vector artwork).
+    Rounded-square blue gradient background, white pan-tilt camera with
+    black lens and green status LED, white person glyph inside a cyan
+    face-detection frame at bottom-right. No text, no third-party marks.
+    Master source; PNG exports live in custom_components/tapo_c260_face/brand/.
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FD8FF"/>
+      <stop offset="0.55" stop-color="#1B9BF2"/>
+      <stop offset="1" stop-color="#0A53E8"/>
+    </linearGradient>
+    <linearGradient id="domeShade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="1" stop-color="#B9C9DC" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background: rounded square, transparent outside -->
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#bg)"/>
+
+  <!-- Camera base -->
+  <rect x="46" y="192" width="112" height="34" rx="13" fill="#EDF1F6"/>
+  <rect x="46" y="214" width="112" height="12" rx="6" fill="#D3DBE5"/>
+  <!-- Neck -->
+  <path d="M76 192 L86 158 L136 158 L146 192 Z" fill="#E3E9F0"/>
+
+  <!-- Dome body -->
+  <circle cx="110" cy="118" r="64" fill="#FFFFFF"/>
+  <circle cx="110" cy="118" r="64" fill="url(#domeShade)"/>
+
+  <!-- Lens housing -->
+  <circle cx="110" cy="116" r="44" fill="#141920"/>
+  <circle cx="110" cy="116" r="30" fill="#232E3D"/>
+  <circle cx="110" cy="116" r="21" fill="none" stroke="#425061" stroke-width="5"/>
+  <circle cx="110" cy="116" r="8" fill="#0A1018"/>
+  <circle cx="107" cy="113" r="3.2" fill="#7C8AFF" opacity="0.85"/>
+  <ellipse cx="99" cy="104" rx="7" ry="4.5" fill="#FFFFFF" opacity="0.30" transform="rotate(-25 99 104)"/>
+  <!-- Status LED -->
+  <circle cx="110" cy="76" r="5.5" fill="#35E86B"/>
+
+  <!-- Soft shadow behind face-detection group -->
+  <rect x="156" y="146" width="72" height="78" rx="18" fill="#062B66" opacity="0.28"/>
+
+  <!-- Face-detection corner frame -->
+  <g fill="none" stroke="#54F0FF" stroke-width="11" stroke-linecap="round">
+    <path d="M176 142 H164 Q152 142 152 154 V168"/>
+    <path d="M200 142 H212 Q224 142 224 154 V168"/>
+    <path d="M152 196 V208 Q152 220 164 220 H178"/>
+    <path d="M224 196 V208 Q224 220 212 220 H198"/>
+  </g>
+
+  <!-- Person glyph -->
+  <circle cx="188" cy="168" r="17" fill="#FFFFFF"/>
+  <path d="M161 214 C161 197 173 190 188 190 C203 190 215 197 215 214 Z" fill="#FFFFFF"/>
+</svg>
